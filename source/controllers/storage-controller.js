@@ -1,7 +1,6 @@
 import busboy from "busboy";
 import Storage from "../models/storage-model.js";
-import { validateSchema, validateQuery } from "../schema-validator.js";
-import { APIError } from "../errors.js";
+import { validateSchema } from "../schema-validator.js";
 
 function formatDate(date) {
     const month = ((date.getMonth() < 9) ? '0' : '') + date.getMonth();

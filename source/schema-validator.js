@@ -9,8 +9,8 @@ function defineSchema(domain, path, joiObject) {
     schemas[domain][path] = joiObject;
 }
 
-function validateSchema(method, schemaPath, object) {
-    const joischema = schemas[method.toLowerCase()]?.[schemaPath];
+function validateSchema(domain, schema, object) {
+    const joischema = schemas[domain.toLowerCase()]?.[schema];
     if (! joischema)
         throw APIError.ERR_INTERNAL_SERVER();
 
@@ -29,12 +29,7 @@ function validateSchema(method, schemaPath, object) {
     return value;
 }
 
-function validateQuery(query, object) {
-    return validateSchema('query', query, object);
-}
-
 export {
     defineSchema,
     validateSchema,
-    validateQuery,
 }
