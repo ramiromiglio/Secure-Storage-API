@@ -6,51 +6,63 @@ Esta es una API RESTful para el almacenamiento seguro de archivos en una base de
 + Cada usuario solo tiene acceso a sus propios archivos
 + Es posible solicitar un token de un solo uso para descargar un archivo resguardado unicamente a partir de un link
 
-### Configuracion
+## Configuracion
 
-Clona el repositorio y accede al proyecto
+Para correr esta aplicacion necesitaras tener instalados Node.js y PostgreSQL en tu sistema. Clona el repositorio en tu maquina y navega al directorio del proyecto:
+
 ```
 git clone https://github.com/ramiromiglio/secure-storage
 cd secure-storage
 ```
 
-Instala los modulos de Node
+Instala las dependencias requeridas
 ```
 npm install
 ```
-
-Una vez instalados los modulos es necesario crear la base de datos y sus respectivas tablas. Los comandos para esto se encuentran en el archivo ```source/scripts/db.sql```. Teniendo PostgreSQL instalado en tu sistema, puedes utilizar el siguiente comando:
+Crea la base de datos y sus respectivas tablas. Los comandos para esto se encuentran en el archivo ```source/scripts/db.sql```. Puedes utilizar el siguiente comando:
 ```
 psql -U YOUR_POSTGRES_USERNAME -a -f source/scripts/db.sql
 ```
 
-Finalmente despliega el servidor:
+## Uso
+
+El servidor por defecto se despliega en el puerto 8004, pero puedes elegir otro cambiando ```DB_PORT``` en el archivo ```.env```. Para desplegar el servidor simplemente ejecute:
 ```
 npm start
 ```
 
-El puerto por defecto es el 8004, pero puedes elegir otro cambiando ```DB_PORT``` en el archivo ```.env```.
+## API Routes
 
-### Autenticacion
+Antes de poder hacer cualquier cosa con los archivos es necesario registrarse o iniciar sesion. En caso de un registro o inicio de sesion exitoso, la respuesta contendra un JWT que servira para autenticar al usuario en llamadas posteriores a la API.
 
-Antes de poder subir un archivo es necesario registrarse pasando pasando los campos ```username``` y ```password``` al endpoint ```/api/auth/signup``` en formato ```x-www-form-urlencoded``` con metodo HTTP ```POST```. En caso de exito la respuesta contendra un JWT que sera necesario para autenticar al usuario en llamadas posteriores a la API, como tambien el ```username```.
+### /api/auth/signup
+
++ HTTP Method: POST
++ Request body:
+  + ```username```: El nombre de usuario
+  + ```password```: La clave
++ Response:
+  + 409 Conflict: Ya existe un usuario con ese nombre de usuario
+  + 201 Created: Devuelve un JSON con el nombre de usuario y el token de autenticacion:
+  ```
+  {
+    "user": "ramiromiglio",
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRt2MDY3fQ.KvZjZAp2CvIl_2dWzCozLvLUNjvUQXbCdyXMZBBsq2k"
+  }
+  ```
+  
+### /api/auth/signin
 
 Una respuesta exitosa podria verse tal que asi:
 ```
-{
-  "user": "ramiromiglio",
-  "token": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRt2MDY3fQ.KvZjZAp2CvIl_2dWzCozLvLUNjvUQXbCdyXMZBBsq2k"
-}
 ```
 
 > [!NOTE]
 > Es posible obtener la misma respuesta llamando al endpoint ```/api/auth/signin``` luego de un registro exitoso.
 
-### Subir, listar, descargar y eliminar
-
 ### Validacion de la solicitud
 
-La validacion del cuerpo de las solicitudes las realiza el middleware schema-validator. Para obtener una instancia del middleware es necesario llamar a ```schemaValidator``` pasando como argumento un identificador de esquema previamente registrado con ```defineSchema```. Los esquemas son objetos Joi y la validacion funciona comparando las propiedades del objeto Joi con los campos del cuerpo de la solicitud en base al nombre. Si la validacion falla se envia un codigo de respuesta 403 (Bad Request) con una lista de los errores con la siguiente sintaxis:
+El servidor realiza la validacion del cuerpo de las solicitudes utilizando el middleware schema-validator. Internamente la instancia del middleware se obtiene llamando a ```schemaValidator``` pasando como argumento un identificador de esquema (previamente registrado con ```defineSchema```). Los esquemas son objetos Joi, y la validacion funciona comparando las propiedades del objeto Joi con los campos del cuerpo de la solicitud en base al nombre. Si la validacion falla se envia un codigo de respuesta 403 (Bad Request) con una lista de los errores con la siguiente sintaxis:
 
 ```
 {
@@ -67,3 +79,8 @@ La validacion del cuerpo de las solicitudes las realiza el middleware schema-val
   ]}
 }
 ```
+
+### Operaciones con archivos
+
++ Subir
+Para subir un archivo, envialo en formato ```multipart/form-data```
