@@ -1,7 +1,6 @@
 {
     "scripts": {
-        "start_api": "npx nodemon source/server.js",
-        "start_proxy": "npx nodemon proxy-server/server.js"
+        "start": "npx nodemon source/server.js"
     },
     "dependencies": {
         "bcrypt": "^5.1.1",
