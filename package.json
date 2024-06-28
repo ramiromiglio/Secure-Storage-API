@@ -1,0 +1,25 @@
+{
+    "scripts": {
+        "start_api": "npx nodemon source/server.js",
+        "start_proxy": "npx nodemon proxy-server/server.js"
+    },
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "body-parser": "^1.20.2",
+        "busboy": "^1.6.0",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "formidable": "^3.5.1",
+        "joi": "^17.13.1",
+        "jsonwebtoken": "^9.0.2",
+        "morgan": "^1.10.0",
+        "pg": "^8.11.5"
+    },
+    "type": "module",
+    "devDependencies": {
+        "@types/express": "^4.17.21",
+        "@types/http-proxy": "^1.17.14",
+        "@types/node": "^20.14.2",
+        "cli-table3": "^0.6.5"
+    }
+}
