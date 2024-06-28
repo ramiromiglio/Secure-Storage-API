@@ -8,41 +8,45 @@ Esta es una API RESTful para el almacenamiento seguro de archivos en una base de
 
 ### Configuracion
 
-Clona el repositorio, accede al proyecto e instala los modulos de Node
+Clona el repositorio y accede al proyecto
 ```
 git clone https://github.com/ramiromiglio/secure-storage
 cd secure-storage
+```
+
+Instala los modulos de Node
+```
 npm install
 ```
 
-Configura la base de datos (requiere PostgreSQL instalado en tu sistema):
+Una vez instalados los modulos es necesario crear la base de datos y sus respectivas tablas. Los comandos para esto se encuentran en el archivo ```source/scripts/db.sql```. Teniendo PostgreSQL instalado en tu sistema, puedes utilizar el siguiente comando:
 ```
 psql -U YOUR_POSTGRES_USERNAME -a -f source/scripts/db.sql
 ```
 
-Despliega el servidor en el puerto 8004:
+Finalmente despliega el servidor:
 ```
 npm start
 ```
 
+El puerto por defecto es el 8004, pero puedes elegir otro cambiando ```DB_PORT``` en el archivo ```.env```.
+
 ### Autenticacion
 
-Antes de poder subir un archivo es necesario registrarse pasando pasando los campos ```username``` y ```password``` al endpoint ```/api/auth/signup``` en formato ```x-www-form-urlencoded```.
+Antes de poder subir un archivo es necesario registrarse pasando pasando los campos ```username``` y ```password``` al endpoint ```/api/auth/signup``` en formato ```x-www-form-urlencoded``` con metodo HTTP ```POST```. En caso de exito la respuesta contendra un JWT que sera necesario para autenticar al usuario en llamadas posteriores a la API, como tambien el ```username```.
 
-Exito:
-
-
-Fallo:
+Una respuesta exitosa podria verse tal que asi:
 ```
-TYPE /auth/username-conflict  STATUS_CODE 409
-TYPE /internal-server         STATUS_CODE 500
+{
+  "user": "ramiromiglio",
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRt2MDY3fQ.KvZjZAp2CvIl_2dWzCozLvLUNjvUQXbCdyXMZBBsq2k"
+}
 ```
 
-En caso de exito, la respuesta c
+> [!NOTE]
+> Es posible obtener la misma respuesta llamando al endpoint ```/api/auth/signin``` luego de un registro exitoso.
 
-TYPE /auth/username-not-found STATUS_CODE 404
-TYPE /auth/invalid-password   STATUS_CODE 401
-
+### Subir, listar, descargar y eliminar
 
 ### Validacion de la solicitud
 
@@ -63,10 +67,3 @@ La validacion del cuerpo de las solicitudes las realiza el middleware schema-val
   ]}
 }
 ```
-
-### Requisitos
-
-Es necesario tener instalado Node y postgresql en marcha
-
-### Configuración
-
