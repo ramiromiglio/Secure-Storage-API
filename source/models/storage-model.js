@@ -120,4 +120,15 @@ export default class Storage {
             return results.rows[0];
         });
     }
+
+    static async deleteFile(id) {
+        if (! await this.exists(id)) {
+            throw APIError.ERR_FILE_NOT_FOUND();
+        }
+        const stmt = `
+            DELETE FROM storage
+            WHERE id = $1
+        `;
+        return db.query(stmt, [id]);
+    }
 }

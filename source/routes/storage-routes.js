@@ -9,5 +9,6 @@ router.get('/', auth, storage_controller.listFiles);
 router.post('/', auth, storage_controller.uploadFile);
 router.post('/request-download/:id', auth, storage_controller.requestDownload);
 router.get('/:id', [oneUseTokenAuth, auth], storage_controller.downloadFile);
+router.delete('/:id', auth, storage_controller.deleteFile);
 
 export default router;
