@@ -1,4 +1,3 @@
-DROP DATABASE IF EXISTS secure_storage;
 CREATE DATABASE secure_storage;
 
 \connect secure_storage;
