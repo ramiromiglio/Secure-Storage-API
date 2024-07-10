@@ -10,8 +10,15 @@ function formatDate(date) {
 
 async function uploadFile(req, res, next) {
 
-    const listener = busboy({ headers: req.headers });
     const buf = [];
+    let listener;
+
+    try {
+        listener = busboy({ headers: req.headers });
+    }
+    catch (error) {
+        return next(error);
+    }
 
     listener.on('file', (field, stream, info) => {
 
@@ -133,9 +140,22 @@ async function downloadFileAsBinary(req, res, next) {
     }
 }
 
+async function deleteFile(req, res, next) {
+    try {
+        const fileId = req.params.id;
+        await Storage.deleteFile(fileId);
+        res.status(200);
+        res.json({});
+    }
+    catch (error) {
+        next(error);
+    }
+}
+
 export default {
     listFiles,
     uploadFile,
     requestDownload,
     downloadFile,
+    deleteFile
 }
