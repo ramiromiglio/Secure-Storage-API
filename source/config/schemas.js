@@ -1,13 +1,15 @@
 import Joi from "joi";
 import { defineSchema } from "../schema-validator.js";
 
+const userRegPattern = /^[a-z]+(-?[a-z0-9]+)*$/i;
+
 defineSchema('post', '/auth/signup', Joi.object({
-    username: Joi.string().min(10).max(20).required(),
+    username: Joi.string().pattern(userRegPattern).min(10).max(20).required(),
     password: Joi.string().alphanum().min(10).max(20).required()
 }));
 
 defineSchema('post', '/auth/signin', Joi.object({
-    username: Joi.string().min(10).max(20).required(),
+    username: Joi.string().pattern(userRegPattern).min(10).max(20).required(),
     password: Joi.string().alphanum().min(10).max(20).required()
 }));
 
