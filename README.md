@@ -19,17 +19,18 @@ Instala las dependencias requeridas
 ```
 npm install
 ```
-Crea la base de datos y sus respectivas tablas. Los comandos para esto se encuentran en el archivo ```source/scripts/db.sql```. Puedes utilizar el siguiente comando:
+Crea la base de datos y sus respectivas tablas. Los comandos SQL se encuentran en el archivo ```source/scripts/db.sql```. Puedes utilizar el siguiente comando para correrlos:
 ```
 psql -U YOUR_POSTGRES_USERNAME -a -f source/scripts/db.sql
 ```
 
 ## Uso
 
-El servidor por defecto se despliega en el puerto 8004, pero puedes elegir otro cambiando ```DB_PORT``` en el archivo ```.env```. Para desplegar el servidor simplemente ejecute:
+Despliega el servidor:
 ```
 npm start
 ```
+El puerto por defecto es el 3000, pero puedes cambiarlo modificando la variable ```DB_PORT``` del archivo ```.env```
 
 ## API Routes
 
@@ -42,19 +43,30 @@ Antes de poder hacer cualquier cosa con los archivos es necesario registrarse o 
   + ```username```: El nombre de usuario
   + ```password```: La clave
 + Response:
+  + 201 Created: Devuelve un JSON con el nombre de usuario y el token de autenticacion
   + 409 Conflict: Ya existe un usuario con ese nombre de usuario
-  + 201 Created: Devuelve un JSON con el nombre de usuario y el token de autenticacion:
-  ```
-  {
-    "user": "ramiromiglio",
-    "token": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRt2MDY3fQ.KvZjZAp2CvIl_2dWzCozLvLUNjvUQXbCdyXMZBBsq2k"
-  }
-  ```
+  + 500 Interal Server Error
+```
+{
+  "user": "ramiromiglio",
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRt2MDY3fQ.KvZjZAp2CvIl_2dWzCozLvLUNjvUQXbCdyXMZBBsq2k"
+}
+```
   
 ### /api/auth/signin
 
-Una respuesta exitosa podria verse tal que asi:
++ HTTP Method: POST
++ Request body:
+  + ```username```: El nombre de usuario
+  + ```password```: La clave
++ Response:
+  + 409 Conflict: Ya existe un usuario con ese nombre de usuario
+  + 201 Created: Devuelve un JSON con el nombre de usuario y el token de autenticacion:
 ```
+{
+  "user": "ramiromiglio",
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRt2MDY3fQ.KvZjZAp2CvIl_2dWzCozLvLUNjvUQXbCdyXMZBBsq2k"
+}
 ```
 
 > [!NOTE]
