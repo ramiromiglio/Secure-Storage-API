@@ -1,7 +1,3 @@
-CREATE DATABASE secure_storage;
-
-\connect secure_storage;
-
 CREATE DOMAIN username_t AS varchar(40);
 
 CREATE TABLE users(

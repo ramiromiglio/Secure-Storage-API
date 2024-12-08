@@ -1,4 +1,4 @@
-psql -U postgres -a -f db.sql
+psql -U postgres secure_storage -a -f db.sql
 
 while true
 do

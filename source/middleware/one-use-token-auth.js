@@ -4,9 +4,6 @@ import { APIError } from "../errors.js";
 export default async function (req, res, next) {
     /* Con esta comprobacion permito que este middleware pueda establecerse antes o despues de
      * otro middleware de autenticacion como {auth} en una misma ruta. */
-    if (req.session) {
-        return next();
-    }
     const token = req.query.token;
     if (req.session || ! token) {
         return next();
